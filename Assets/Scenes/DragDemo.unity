@@ -317,9 +317,10 @@ GameObject:
   - component: {fileID: 208463420}
   - component: {fileID: 208463422}
   - component: {fileID: 208463423}
+  - component: {fileID: 208463424}
   m_Layer: 5
   m_Name: DragObject5
-  m_TagString: Untagged
+  m_TagString: Adjective
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -407,6 +408,20 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &208463424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208463418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ad90fc1504e25b4e996920072ee4547, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  definition: Giving or ready to give help.
+  pronunciation: {fileID: 0}
 --- !u!1 &227353433
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,9 +435,10 @@ GameObject:
   - component: {fileID: 227353435}
   - component: {fileID: 227353437}
   - component: {fileID: 227353438}
+  - component: {fileID: 227353439}
   m_Layer: 5
   m_Name: DragObject6
-  m_TagString: Untagged
+  m_TagString: Adjective
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -510,6 +526,20 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &227353439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 227353433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ad90fc1504e25b4e996920072ee4547, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  definition: Ready to face and endure danger or pain; showing courage.
+  pronunciation: {fileID: 0}
 --- !u!1 &283871970
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,9 +610,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Drop Here
-
-'
+  m_Text: Adjective
 --- !u!222 &283871973
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -602,7 +630,7 @@ GameObject:
   - component: {fileID: 465609736}
   m_Layer: 5
   m_Name: DropArea1
-  m_TagString: Untagged
+  m_TagString: Noun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -981,7 +1009,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Drop Here
+  m_Text: Noun
 --- !u!222 &1458927670
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1003,9 +1031,10 @@ GameObject:
   - component: {fileID: 1514352444}
   - component: {fileID: 1514352446}
   - component: {fileID: 1514352447}
+  - component: {fileID: 1514352448}
   m_Layer: 5
   m_Name: DragObject4
-  m_TagString: Untagged
+  m_TagString: Noun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1093,6 +1122,20 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1514352448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1514352442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ad90fc1504e25b4e996920072ee4547, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  definition: Sophisticated or expensive in a way that is intended to impress.
+  pronunciation: {fileID: 0}
 --- !u!1 &1795913518
 GameObject:
   m_ObjectHideFlags: 0
@@ -1289,7 +1332,7 @@ GameObject:
   - component: {fileID: 1999292727}
   m_Layer: 5
   m_Name: Area
-  m_TagString: Untagged
+  m_TagString: Noun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1479,7 +1522,7 @@ GameObject:
   - component: {fileID: 2066621999}
   m_Layer: 5
   m_Name: Area
-  m_TagString: Untagged
+  m_TagString: Adjective
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

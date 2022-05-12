@@ -6,11 +6,25 @@ public class DropArea : MonoBehaviour, IDropHandler
 {
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("Object is in drop area");
+        // Snap object into position
         if (eventData.pointerDrag != null)
         {
             eventData.pointerDrag.GetComponent<RectTransform>().position = this.GetComponent<RectTransform>().position;
             eventData.pointerDrag.GetComponent<Drag>().Dropped = true;
         }
+
+        // Check by tag if object is Noun or Adjective
+        if (eventData.pointerDrag.CompareTag(gameObject.tag))
+        {
+            Debug.Log(eventData.pointerDrag.GetComponent<Word>().definition);
+            Debug.Log("Correct, this word is a " + gameObject.tag);
+        }
+        else
+            Debug.Log("Incorrect, this word is a " + gameObject.tag);
+    }
+
+    public void DisplayWordDefinition()
+    {
+        // displayText = dataobject.Definition.text;
     }
 }

@@ -38,6 +38,9 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
         // Must block raycasts so that DropArea can detect OnDrop from IDropHandler
         canvasGroup.blocksRaycasts = false;
+
+        // Reset 'dropped' property so we can reset position OnEndDrag
+        Dropped = false;
     }
 
     public void OnEndDrag(PointerEventData eventData)
