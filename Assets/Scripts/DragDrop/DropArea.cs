@@ -21,9 +21,4 @@ public class DropArea : MonoBehaviour, IDropHandler
         else
             Debug.Log("Incorrect, this word is a " + gameObject.tag);
     }
-
-    public void DisplayWordDefinition()
-    {
-        // displayText = dataobject.Definition.text;
-    }
 }

@@ -4,22 +4,15 @@ using UnityEngine.EventSystems;
 
 public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-    private RectTransform dragObject;
+    public bool Dropped { get; set; }
     public CanvasGroup canvasGroup;
+    private RectTransform dragObject;
     private Vector3 startPos;
 
 
-    // We want to know when a word is dragged so we can display it's definition
-    public StringEvent DragEvent = new StringEvent();
-
-
-    // For DropArea to let us know object has been dropped
-    private bool dropped;
-    public bool Dropped
-    {
-        get { return dropped; }
-        set { dropped = value; }
-    }
+    // Know when a word is dragged so we can display it's definition
+    public delegate void BeginDrag();
+    public event BeginDrag beginDrag;
 
     private void Start()
     {
@@ -42,13 +35,9 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        // Response to beginning drag: Change color of drag object or cursor, sfx, etc.
-        // soundManager.PlayDragSFX();
-
-
-        if (DragEvent != null)
+        if (beginDrag != null)
         {
-            DragEvent.Invoke("test");
+            beginDrag.Invoke();
         }
 
         // Must block raycasts so that DropArea can detect OnDrop from IDropHandler
@@ -60,9 +49,6 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        // Response to ending drag: Change color of drag object or cursor, sfx, etc.
-        // soundManager.PlayDropSFX();
-
         // Reset raycasts
         canvasGroup.blocksRaycasts = true;
 

@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public class APIController : MonoBehaviour
 {
@@ -37,9 +38,13 @@ public class APIController : MonoBehaviour
             JArray jArray = JArray.Parse(nounRequest.downloadHandler.text);
 
             // Return words to WordManager
-            yield return Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(jArray.ToString());
+            yield return JsonConvert.DeserializeObject<string[]>(jArray.ToString());
         }
     }
+
+    // If no definition is found for a word, will return:
+    // {"title":"No Definitions Found"}
+    // Since this isn't a connection error, we check this manually and skip the word
 
     // Free Dictionary API: https://github.com/meetDeveloper/freeDictionaryAPI
     private IEnumerator GetWordDefinitions(string[] arr)
@@ -62,8 +67,28 @@ public class APIController : MonoBehaviour
             {
                 Debug.Log(definitionRequest.downloadHandler.text);
 
-                // Parse definitions
-                JArray jArray = JArray.Parse(definitionRequest.downloadHandler.text);
+                // If no definition is found for a word, will return:
+                // {"title":"No Definitions Found"}
+                // Since this isn't a connection error, we check this manually and skip the word
+                //if ()
+                //{
+
+                //}
+
+
+                JArray jArray;
+
+                try
+                {
+                    // Parse definitions
+                    jArray = JArray.Parse(definitionRequest.downloadHandler.text);
+                }
+                catch (JsonReaderException e)
+                {
+                    Debug.Log("cound not parse json");
+                    Debug.Log(e.Message);
+                    throw new JsonReaderException("Could not parse, likely because definition was not found.", e);
+                }
 
                 // Deserialize into a Word object
                 results.Add(Newtonsoft.Json.JsonConvert.DeserializeObject<Word>(jArray[0].ToString()));
