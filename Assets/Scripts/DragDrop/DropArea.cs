@@ -14,11 +14,11 @@ public class DropArea : MonoBehaviour, IDropHandler
         }
 
         // Check by tag if object is Noun or Adjective
-        if (eventData.pointerDrag.CompareTag(gameObject.tag))
+        if (gameObject.CompareTag(eventData.pointerDrag.tag))
         {
-            Debug.Log("Correct, this word is a " + gameObject.tag);
+            Debug.Log("Correct, this word is a " + eventData.pointerDrag.tag);
         }
         else
-            Debug.Log("Incorrect, this word is a " + gameObject.tag);
+            Debug.Log("Incorrect, this word is a " + eventData.pointerDrag.tag);
     }
 }

@@ -19,96 +19,120 @@ public class APIController : MonoBehaviour
     // This is using 2 open-source APIs to get random words and their definitions, because Random Word API does not provide definitions.
 
     // Random Word API: https://github.com/RazorSh4rk/random-word-api
-    private IEnumerator GetRandomWords()
+    private IEnumerator GetRandomWords(int wordCount)
     {
-        // Get 4 random nouns
-        UnityWebRequest nounRequest = UnityWebRequest.Get("https://random-word-form.herokuapp.com/random/noun?count=4");
+        // Prep our return
+        List<Word> words = new List<Word>();
 
-        // Wait for request
-        yield return nounRequest.SendWebRequest();
-
-        // Process request result
-        if (nounRequest.result == UnityWebRequest.Result.ConnectionError)
+        // Get nouns and definitions
+        for (int i = 0; i < wordCount; i++)
         {
-            Debug.Log("No response/Connection Error");
-        }
-        else
-        {
-            // Parse words
-            JArray jArray = JArray.Parse(nounRequest.downloadHandler.text);
+            UnityWebRequest nounRequest = UnityWebRequest.Get("https://random-word-form.herokuapp.com/random/noun");
 
-            // Return words to WordManager
-            yield return JsonConvert.DeserializeObject<string[]>(jArray.ToString());
-        }
-    }
+            // Wait for request
+            yield return nounRequest.SendWebRequest();
 
-    // If no definition is found for a word, will return:
-    // {"title":"No Definitions Found"}
-    // Since this isn't a connection error, we check this manually and skip the word
-
-    // Free Dictionary API: https://github.com/meetDeveloper/freeDictionaryAPI
-    private IEnumerator GetWordDefinitions(string[] arr)
-    {
-        List<Word> results = new List<Word>();
-
-        foreach (string word in arr)
-        {
-            Debug.Log("Finding definition for: " + word);
-
-            UnityWebRequest definitionRequest = UnityWebRequest.Get("https://api.dictionaryapi.dev/api/v2/entries/en/" + word);
-
-            yield return definitionRequest.SendWebRequest();
-
-            if (definitionRequest.result == UnityWebRequest.Result.ConnectionError)
+            // Process request result
+            if (nounRequest.result == UnityWebRequest.Result.ConnectionError)
             {
-                Debug.Log("No response from website");
+                Debug.Log("No response/Connection Error");
             }
             else
             {
-                Debug.Log(definitionRequest.downloadHandler.text);
+                Debug.Log(nounRequest.downloadHandler.text);
 
-                // If no definition is found for a word, will return:
-                // {"title":"No Definitions Found"}
-                // Since this isn't a connection error, we check this manually and skip the word
-                //if ()
-                //{
+                // Find definition of word
+                // Since we are given an array, remove first and last character using Substring
+                UnityWebRequest definitionRequest = UnityWebRequest.
+                    Get("https://api.dictionaryapi.dev/api/v2/entries/en/" + JsonConvert.
+                    DeserializeObject<string>(nounRequest.downloadHandler.text.Substring(1, nounRequest.downloadHandler.text.Length - 2)));
 
-                //}
+                yield return definitionRequest.SendWebRequest();
 
-
-                JArray jArray;
-
-                try
+                // Process request result
+                if (definitionRequest.result == UnityWebRequest.Result.ConnectionError)
                 {
-                    // Parse definitions
-                    jArray = JArray.Parse(definitionRequest.downloadHandler.text);
+                    Debug.Log("No response/Connection Error");
                 }
-                catch (JsonReaderException e)
+                else
                 {
-                    Debug.Log("cound not parse json");
-                    Debug.Log(e.Message);
-                    throw new JsonReaderException("Could not parse, likely because definition was not found.", e);
+                    // Process JSON
+                    JArray jArray;
+                    try
+                    {
+                        // Parse definitions
+                        jArray = JArray.Parse(definitionRequest.downloadHandler.text);
+                    }
+                    catch (JsonReaderException)
+                    {
+                        // Could not parse because definition was not found. Get another word and repeat process.
+                        i--;
+                        continue;
+                    }
+                    words.Add(JsonConvert.DeserializeObject<Word>(jArray[0].ToString()));
                 }
-
-                // Deserialize into a Word object
-                results.Add(Newtonsoft.Json.JsonConvert.DeserializeObject<Word>(jArray[0].ToString()));
             }
         }
-        // Return to WordManager
-        yield return results.ToArray();
-    }
 
 
-    public IEnumerator GetWords(System.Action<string[]> callback)
-    {
-        var routine = GetRandomWords();
-        yield return routine;
-        callback((string[])routine.Current);
+        // Repeat the process for adjectives
+        for (int i = 0; i < wordCount; i++)
+        {
+            UnityWebRequest adjRequest = UnityWebRequest.Get("https://random-word-form.herokuapp.com/random/noun");
+
+            // Wait for request
+            yield return adjRequest.SendWebRequest();
+
+            // Process request result
+            if (adjRequest.result == UnityWebRequest.Result.ConnectionError)
+            {
+                Debug.Log("No response/Connection Error");
+            }
+            else
+            {
+                Debug.Log(adjRequest.downloadHandler.text);
+
+                // Find definition
+                // Since it's given as an array, remove first and last character using Substring
+                UnityWebRequest definitionRequest = UnityWebRequest.
+                    Get("https://api.dictionaryapi.dev/api/v2/entries/en/" + JsonConvert.
+                    DeserializeObject<string>(adjRequest.downloadHandler.text.Substring(1, adjRequest.downloadHandler.text.Length - 2)));
+
+                yield return definitionRequest.SendWebRequest();
+
+                // Process request result
+                if (definitionRequest.result == UnityWebRequest.Result.ConnectionError)
+                {
+                    Debug.Log("No response/Connection Error");
+                }
+                else
+                {
+                    // Process JSON
+                    JArray jArray;
+                    try
+                    {
+                        // Parse definitions
+                        jArray = JArray.Parse(definitionRequest.downloadHandler.text);
+                    }
+                    catch (JsonReaderException)
+                    {
+                        // Could not parse because definition was not found. Get another word and repeat process.
+                        i--;
+                        continue;
+                    }
+                    words.Add(JsonConvert.DeserializeObject<Word>(jArray[0].ToString()));
+                }
+            }
+        }
+
+        // Return words to WordManager
+        yield return words;
     }
-    public IEnumerator GetDefinition(string[] arr, System.Action<Word[]> callback)
+
+    public IEnumerator GetWords(System.Action<List<Word>> callback)
     {
-        var routine = GetWordDefinitions(arr);
+        var routine = GetRandomWords(4);
         yield return routine;
-        callback((Word[])routine.Current);
+        callback((List<Word>)routine.Current);
     }
 }

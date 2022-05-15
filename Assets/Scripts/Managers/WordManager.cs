@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,29 +9,18 @@ public class WordManager : MonoBehaviour
 
     private void Start()
     {
-        GenerateWords();
+        GetWords();
     }
 
-    private void GenerateWords()
+    private void GetWords()
     {
-        StartCoroutine(APIController.instance.GetWords((value) =>
-        {
-            GenerateDefinitions(value);
-        }));
-    }
-
-    private void GenerateDefinitions(string[] arr)
-    {
-        StartCoroutine(APIController.instance.GetDefinition(arr, (value) =>
-        {
-            GetWordObj(value);
-        }));
+        StartCoroutine(APIController.instance.GetWords((value) => { BuildWordObj(value); }));
     }
 
     // Build Word objects
-    private void GetWordObj(Word[] words)
+    private void BuildWordObj(List<Word> words)
     {
-        for (int i = 0; i < words.Length; i++)
+        for (int i = 0; i < words.Count; i++)
         {
             Debug.Log(words[i].word + ": " + words[i].Meanings[0].Definitions[0].text);
 
@@ -39,13 +29,11 @@ public class WordManager : MonoBehaviour
             newWordUI.word = words[i];
             newWordUI.DisplayUI();
 
-            //newWordUI.GetComponent<Drag>().SetStartPos();
-
             // Set event to display word's definition
             newWordUI.GetComponent<Drag>().beginDrag += () => { DefinitionUI.instance.Display(newWordUI.word.Meanings[0].Definitions[0].text); };
 
-            //newWordUI.GetComponent<Drag>().dragEvent += () => { AudioManager.instance.PlayPickupSFX(); };
-            //newWordUI.GetComponent<Drag>().dragEvent += () => { CursorManager.instance.PlayPickupSFX(); };
+            //newWordUI.GetComponent<Drag>().beginDrag += () => { AudioManager.instance.PlayPickupSFX(DefinitionUI.instance.Display(newWordUI.word.Phonetics[0].Audio); };
+            //newWordUI.GetComponent<Drag>().beginDrag += () => { CursorManager.instance.PlayPickupSFX(); };
 
             // Set tag for DropArea to check
             newWordUI.tag = newWordUI.word.Meanings[0].PartOfSpeech;
