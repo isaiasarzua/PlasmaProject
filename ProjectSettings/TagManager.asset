@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Noun
-  - Adjective
+  - noun
+  - adjective
   layers:
   - Default
   - TransparentFX

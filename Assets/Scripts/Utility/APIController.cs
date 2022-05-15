@@ -33,8 +33,6 @@ public class APIController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Data retrieved...");
-
             // Parse words
             JArray jArray = JArray.Parse(nounRequest.downloadHandler.text);
 

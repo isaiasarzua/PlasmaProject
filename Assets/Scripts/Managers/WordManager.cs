@@ -1,7 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WordManager : MonoBehaviour
 {
+    public WordUI wordPrefab;
+    public GridLayoutGroup container;
+
     private void Start()
     {
         GenerateWords();
@@ -28,11 +32,21 @@ public class WordManager : MonoBehaviour
     // Build Word objects
     public void GetWordObj(Word[] words)
     {
-        foreach (Word w in words)
+        Debug.Log("Got " + words.Length + " words.");
+        for (int i = 0; i < words.Length; i++)
         {
-            Debug.Log(w.word);
-            Debug.Log(w.Phonetics[0].text);
-            Debug.Log(w.Meanings[0].Definitions[0].text);
+            Debug.Log(words[i].word + ": " + words[i].Meanings[0].Definitions[0].text);
+
+            WordUI newWordUI = Instantiate(wordPrefab, container.transform);
+
+            newWordUI.word = words[i];
+            newWordUI.DisplayUI();
+
+            //newWordUI.GetComponent<Drag>().SetStartPos();
+            newWordUI.GetComponent<Drag>().DragEvent.AddListener(delegate { DefinitionUI.instance.Display(newWordUI.word.Meanings[0].Definitions[0].text); });
+            newWordUI.tag = newWordUI.word.Meanings[0].PartOfSpeech;
         }
+        Debug.Log("Finished looping");
+        //container.enabled = false;
     }
 }

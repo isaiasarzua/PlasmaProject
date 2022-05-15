@@ -16,7 +16,6 @@ public class DropArea : MonoBehaviour, IDropHandler
         // Check by tag if object is Noun or Adjective
         if (eventData.pointerDrag.CompareTag(gameObject.tag))
         {
-            Debug.Log(eventData.pointerDrag.GetComponent<Word>().Meanings[0].Definitions[0].text);
             Debug.Log("Correct, this word is a " + gameObject.tag);
         }
         else

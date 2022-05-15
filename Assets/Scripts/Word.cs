@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using UnityEngine;
 
 /*
 Free Dictionary API JSON Model:
@@ -70,7 +71,7 @@ Free Dictionary API JSON Model:
 */
 
 // Removed unnecessary fields license, sourceUrls, phonetic, synonyms and antonyms
-public partial class Word
+public partial class Word : MonoBehaviour
 {
     [JsonProperty("word")]
     public string word { get; set; }

@@ -8,6 +8,11 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public CanvasGroup canvasGroup;
     private Vector3 startPos;
 
+
+    // We want to know when a word is dragged so we can display it's definition
+    public StringEvent DragEvent = new StringEvent();
+
+
     // For DropArea to let us know object has been dropped
     private bool dropped;
     public bool Dropped
@@ -16,10 +21,14 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         set { dropped = value; }
     }
 
-    void Awake()
+    private void Start()
     {
         dragObject = transform as RectTransform;
-        startPos = dragObject.position;
+    }
+
+    public void SetStartPos()
+    {
+        startPos = transform.position;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -35,6 +44,12 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     {
         // Response to beginning drag: Change color of drag object or cursor, sfx, etc.
         // soundManager.PlayDragSFX();
+
+
+        if (DragEvent != null)
+        {
+            DragEvent.Invoke("test");
+        }
 
         // Must block raycasts so that DropArea can detect OnDrop from IDropHandler
         canvasGroup.blocksRaycasts = false;
