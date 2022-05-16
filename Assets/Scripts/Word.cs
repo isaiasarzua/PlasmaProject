@@ -71,7 +71,7 @@ Free Dictionary API JSON Model:
 */
 
 // Removed unnecessary fields license, sourceUrls, phonetic, synonyms and antonyms
-public partial class Word : MonoBehaviour
+public partial class Word
 {
     [JsonProperty("word")]
     public string word { get; set; }

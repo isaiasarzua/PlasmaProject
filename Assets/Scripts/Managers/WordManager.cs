@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class WordManager : MonoBehaviour
 {
     public WordUI wordPrefab;
-    public GridLayoutGroup container;
+    public Transform container;
 
     private void Start()
     {
@@ -14,17 +14,15 @@ public class WordManager : MonoBehaviour
 
     private void GetWords()
     {
-        StartCoroutine(APIController.instance.GetWords((value) => { BuildWordObj(value); }));
+        StartCoroutine(APIController.instance.GetWords((value) => { BuildWordUI(value); }));
     }
 
     // Build Word objects
-    private void BuildWordObj(List<Word> words)
+    private void BuildWordUI(List<Word> words)
     {
         for (int i = 0; i < words.Count; i++)
         {
-            Debug.Log(words[i].word + ": " + words[i].Meanings[0].Definitions[0].text);
-
-            WordUI newWordUI = Instantiate(wordPrefab, container.transform);
+            WordUI newWordUI = Instantiate(wordPrefab, container);
 
             newWordUI.word = words[i];
             newWordUI.DisplayUI();
@@ -39,6 +37,5 @@ public class WordManager : MonoBehaviour
             newWordUI.tag = newWordUI.word.Meanings[0].PartOfSpeech;
         }
         Debug.Log("Finished looping");
-        //container.enabled = false;
     }
 }

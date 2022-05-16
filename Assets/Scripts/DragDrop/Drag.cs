@@ -17,10 +17,6 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     private void Start()
     {
         dragObject = transform as RectTransform;
-    }
-
-    public void SetStartPos()
-    {
         startPos = transform.position;
     }
 

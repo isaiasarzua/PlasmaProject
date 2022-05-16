@@ -3,13 +3,14 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class APIController : MonoBehaviour
 {
     public static APIController instance;
+    private int timeout = 2;
 
     private void Awake()
     {
@@ -39,23 +40,36 @@ public class APIController : MonoBehaviour
             }
             else
             {
-                Debug.Log(nounRequest.downloadHandler.text);
+                Debug.Log("Received response");
+
+                // Since we are given an array, remove surrounding [] using Substring, then serialize to string
+                string newNoun = JsonConvert.DeserializeObject<string>(nounRequest.downloadHandler.text.Substring(1, nounRequest.downloadHandler.text.Length - 2));
 
                 // Find definition of word
-                // Since we are given an array, remove first and last character using Substring
                 UnityWebRequest definitionRequest = UnityWebRequest.
-                    Get("https://api.dictionaryapi.dev/api/v2/entries/en/" + JsonConvert.
-                    DeserializeObject<string>(nounRequest.downloadHandler.text.Substring(1, nounRequest.downloadHandler.text.Length - 2)));
+                    Get("https://api.dictionaryapi.dev/api/v2/entries/en/" + newNoun);
 
+                definitionRequest.timeout = timeout;
+
+                // Wait for request
                 yield return definitionRequest.SendWebRequest();
 
                 // Process request result
                 if (definitionRequest.result == UnityWebRequest.Result.ConnectionError)
                 {
-                    Debug.Log("No response/Connection Error");
+                    // If Dictionary API is not available skip it and manually build word before returning to WordManager
+                    Word newWord = new Word();
+                    newWord.word = newNoun;
+                    newWord.Meanings = new Meaning[] {
+                        new Meaning { PartOfSpeech = "noun", Definitions =
+                        new Definition[] { new Definition { text = "Not available" } } } };
+
+                    words.Add(newWord);
                 }
-                else
+                else if (definitionRequest.result == UnityWebRequest.Result.Success)
                 {
+                    Debug.Log("Received response from API");
+                    Debug.Log(definitionRequest.result);
                     // Process JSON
                     JArray jArray;
                     try
@@ -66,6 +80,7 @@ public class APIController : MonoBehaviour
                     catch (JsonReaderException)
                     {
                         // Could not parse because definition was not found. Get another word and repeat process.
+                        Debug.Log("continuing process");
                         i--;
                         continue;
                     }
@@ -90,22 +105,30 @@ public class APIController : MonoBehaviour
             }
             else
             {
-                Debug.Log(adjRequest.downloadHandler.text);
+                // Since we are given an array, remove surrounding [] using Substring, then serialize to string
+                string newAdj = JsonConvert.DeserializeObject<string>(adjRequest.downloadHandler.text.Substring(1, adjRequest.downloadHandler.text.Length - 2));
 
-                // Find definition
-                // Since it's given as an array, remove first and last character using Substring
+                // Find definition of word
                 UnityWebRequest definitionRequest = UnityWebRequest.
-                    Get("https://api.dictionaryapi.dev/api/v2/entries/en/" + JsonConvert.
-                    DeserializeObject<string>(adjRequest.downloadHandler.text.Substring(1, adjRequest.downloadHandler.text.Length - 2)));
+                    Get("https://api.dictionaryapi.dev/api/v2/entries/en/" + newAdj);
+
+                definitionRequest.timeout = timeout;
 
                 yield return definitionRequest.SendWebRequest();
 
                 // Process request result
                 if (definitionRequest.result == UnityWebRequest.Result.ConnectionError)
                 {
-                    Debug.Log("No response/Connection Error");
+                    // If Dictionary API is not available skip it and manually build word before returning to WordManager
+                    Word newWord = new Word();
+                    newWord.word = newAdj;
+                    newWord.Meanings = new Meaning[] {
+                        new Meaning { PartOfSpeech = "adjective", Definitions =
+                        new Definition[] { new Definition { text = "Not available" } } } };
+
+                    words.Add(newWord);
                 }
-                else
+                else if (definitionRequest.result == UnityWebRequest.Result.Success)
                 {
                     // Process JSON
                     JArray jArray;
