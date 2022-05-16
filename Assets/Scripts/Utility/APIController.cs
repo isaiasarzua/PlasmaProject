@@ -93,7 +93,7 @@ public class APIController : MonoBehaviour
         // Repeat the process for adjectives
         for (int i = 0; i < wordCount; i++)
         {
-            UnityWebRequest adjRequest = UnityWebRequest.Get("https://random-word-form.herokuapp.com/random/noun");
+            UnityWebRequest adjRequest = UnityWebRequest.Get("https://random-word-form.herokuapp.com/random/adjective");
 
             // Wait for request
             yield return adjRequest.SendWebRequest();

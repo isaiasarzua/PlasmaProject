@@ -7,7 +7,7 @@ public class ExportData : MonoBehaviour
     public void ExportTextFile(string inputText)
     {
         // If the file exists, it can be either overwritten or appended to. If the file does not exist, this constructor creates a new file.
-        StreamWriter writer = new StreamWriter(Application.streamingAssetsPath + "/Export Files/Log.txt", true);
+        StreamWriter writer = new StreamWriter(Application.streamingAssetsPath + "/Export Files/Log.txt", false);
         writer.WriteLine(inputText);
         writer.Close();
     }
