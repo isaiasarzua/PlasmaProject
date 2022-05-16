@@ -6,6 +6,7 @@ TagManager:
   tags:
   - noun
   - adjective
+  - verb
   layers:
   - Default
   - TransparentFX
