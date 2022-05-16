@@ -9,7 +9,6 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     private RectTransform dragObject;
     private Vector3 startPos;
 
-
     // Know when a word is dragged so we can display it's definition
     public delegate void BeginDrag();
     public event BeginDrag beginDrag;
@@ -40,15 +39,17 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         canvasGroup.blocksRaycasts = false;
 
         // Reset 'dropped' property so we can reset position OnEndDrag
-        Dropped = false;
+        //Dropped = false;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        // Reset raycasts
-        canvasGroup.blocksRaycasts = true;
-
         // Reset position if object was not placed in a DropArea
-        if (!Dropped) dragObject.position = startPos;
+        if (!Dropped)
+        {
+            // Reset raycasts
+            canvasGroup.blocksRaycasts = true;
+            dragObject.position = startPos;
+        }
     }
 }
